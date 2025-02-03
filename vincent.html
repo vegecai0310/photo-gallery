@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vincent的摄影作品</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">← 返回首页</a>
+    <header>
+        <h1>Vincent的摄影作品</h1>
+    </header>
+    <main class="gallery-grid">
+        <script>
+            // Generate gallery items for Vincent's photos (1-51)
+            for (let i = 1; i <= 51; i++) {
+                document.write(`
+                    <div class="gallery-item" onclick="openFullscreen(${i})">
+                        <img src="images/vincent/${i}.JPG" alt="Vincent's Photo ${i}">
+                    </div>
+                `);
+            }
+        </script>
+    </main>
+
+    <!-- Fullscreen View -->
+    <div class="fullscreen-view">
+        <button class="fullscreen-close" onclick="closeFullscreen()">×</button>
+        <button class="nav-button prev-button" onclick="navigateImage(-1)">❮</button>
+        <img class="fullscreen-image" src="" alt="Fullscreen Photo">
+        <button class="nav-button next-button" onclick="navigateImage(1)">❯</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Vincent Photography</p>
+    </footer>
+
+    <script>
+        let currentImageIndex = 1;
+        const totalImages = 51;
+
+        function openFullscreen(index) {
+            currentImageIndex = index;
+            const fullscreenView = document.querySelector('.fullscreen-view');
+            const fullscreenImage = document.querySelector('.fullscreen-image');
+            fullscreenImage.src = `images/vincent/${index}.JPG`;
+            fullscreenView.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreen() {
+            const fullscreenView = document.querySelector('.fullscreen-view');
+            fullscreenView.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function navigateImage(direction) {
+            currentImageIndex = ((currentImageIndex + direction - 1 + totalImages) % totalImages) + 1;
+            const fullscreenImage = document.querySelector('.fullscreen-image');
+            fullscreenImage.src = `images/vincent/${currentImageIndex}.JPG`;
+        }
+
+        // Close fullscreen view when clicking outside the image
+        document.querySelector('.fullscreen-view').addEventListener('click', function(e) {
+            if (e.target.classList.contains('fullscreen-view')) {
+                closeFullscreen();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!document.querySelector('.fullscreen-view').classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeFullscreen();
+                    break;
+                case 'ArrowLeft':
+                    navigateImage(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateImage(1);
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
